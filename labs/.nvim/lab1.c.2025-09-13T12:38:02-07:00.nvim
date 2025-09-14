@@ -1,0 +1,41 @@
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char *argv[]) {
+
+  char *buffptr = NULL;
+  size_t buffsize = 0;
+  FILE *stream;
+  ssize_t n;
+  char *token = NULL;
+  int i;
+  char *str, *saveptr;
+  /*scanf("Please enter some text: ", stream);*/
+  stream = fopen(argv[1], "r");
+  n = getline(&buffptr, &buffsize, stream);
+  for (i = 0, str = buffptr; i < n; str = NULL, i++) {
+    token = strtok_r(str, argv[2], &saveptr);
+    if (token == NULL) break;
+    printf("%s\n", token);
+  }
+  printf("%zd", n);
+  /**/
+  /*char* buffptr = NULL;*/
+  /*size_t buffsize = 0;*/
+  /*ssize_t n;*/
+  /*FILE* stream;*/
+  /*char delim = ' ';*/
+  /*char* saveptr;*/
+  /*char* str;*/
+  /*char* token;*/
+  /**/
+  /*n = getline(&buffptr,buffsize,stream);*/
+  /*for(str = stream; n != -1; str = NULL){*/
+  /*  token = strtok_r(str, delim, &saveptr);*/
+  /**/
+  /*  printf("%s\n",token);*/
+  /*}*/
+  return 0;
+}
