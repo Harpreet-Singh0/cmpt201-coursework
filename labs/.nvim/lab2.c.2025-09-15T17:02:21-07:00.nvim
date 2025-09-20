@@ -1,0 +1,16 @@
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+int main() {
+  char *buffptr = NULL;
+  size_t buffsize = 0;
+  char prog[20] = "/usr/bin/zsh";
+  while (1) {
+    printf("Enter programs to run.\n");
+    getline(&buffptr, &buffsize, stdin);
+    printf("%s",buffptr);
+    execl(prog, buffptr);
+  }
+  return 0;
+}

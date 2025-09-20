@@ -1,0 +1,49 @@
+#define _GNU_SOURCE
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <string.h>
+int main() {
+  char *buffptr = NULL;
+  size_t buffsize = 0;
+  ssize_t n = 0;
+  pid_t pid;
+  while (1) {
+    printf("Enter programs to run.\n");
+    n = getline(&buffptr, &buffsize, stdin);
+    if (n == -1) {
+      perror("getline error\n");
+      exit(errno);
+    }
+    /*char d[] = "/bin/ls\n";*/
+    // d = buffptr;
+    // printf("%s", d);
+    /*execl(d, d, (char *)NULL);*/
+
+    pid = fork();
+
+    if (pid == 0) {
+      /*printf("Inside child process\n");*/
+      /*char *s;*/
+      buffptr[strcspn(buffptr, "\n")] = 0;
+      int n2 = execl(buffptr, buffptr, (char *)NULL);
+      if (n2 == -1) {
+        perror("exec error\n");
+        exit(errno);
+      }
+    } else {
+      /*printf("Inside parent process\n");*/
+      int wstatus = 0;
+      pid_t p = waitpid(-1, &wstatus, 0);
+      if (p == -1) {
+        perror("waitpid error\n");
+        exit(errno);
+      }
+    }
+    free(buffptr);
+    exit(EXIT_SUCCESS);
+  }
+  return 0;
+}

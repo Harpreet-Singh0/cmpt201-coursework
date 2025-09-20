@@ -1,0 +1,28 @@
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+int main() {
+  char *buffptr = NULL;
+  size_t buffsize = 0;
+  pid_t pid;
+  while (1) {
+    printf("Enter programs to run.\n");
+    getline(&buffptr, &buffsize, stdin);
+    printf("%s\n", buffptr);
+    execl("/bin/ls","/bin/ls",(char *)NULL);
+    pid = fork();
+    if (pid == 0) {
+      printf("Inside child process\n");
+      execl(buffptr, buffptr, (char *)NULL);
+    } else {
+      printf("Inside parent process\n");
+      int wstatus = 0;
+      waitpid(-1, &wstatus, 0);
+    }
+    free(buffptr);
+  }
+  return 0;
+}

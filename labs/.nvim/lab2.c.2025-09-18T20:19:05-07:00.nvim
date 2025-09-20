@@ -1,0 +1,25 @@
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+  char *buffptr = NULL;
+  size_t buffsize = 0;
+  pid_t pid;
+  while (1) {
+    printf("Enter programs to run.\n");
+    getline(&buffptr, &buffsize, stdin);
+
+    pid = fork();
+    if (pid == 0) {
+      execl(buffptr, buffptr, (char *)NULL);
+    }
+    else{
+      int wstatus = 0;
+      waitpid(-1, &wstatus, 0);
+    }
+  }
+  return 0;
+}
