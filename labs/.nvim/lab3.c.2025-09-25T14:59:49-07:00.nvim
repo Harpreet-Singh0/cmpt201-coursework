@@ -1,0 +1,20 @@
+#define _POSIX_C_SOURCE 200809
+#include <error.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+  char *buffptr = NULL;
+  size_t size = 0;
+
+  while (true) {
+    printf("Enter some input: ");
+    if (getline(&buffptr, &size, stdin) == -1) {
+      perror("getline error");
+      exit(EXIT_FAILURE);
+    }
+    printf("%s\n",buffptr);
+  }
+  free(buffptr);
+  return 0;
+}

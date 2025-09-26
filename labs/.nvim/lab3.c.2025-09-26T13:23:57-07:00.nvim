@@ -1,0 +1,48 @@
+#define _POSIX_C_SOURCE 200809
+#include <error.h>
+#include <signal.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+  char *buffptr = NULL;
+  size_t size = 0;
+  char *a[5] = {NULL};
+  int counter = 0;
+  char *sig_string = "print\n";
+
+  for (int i = 0; i < 5; i++) {
+    a[i] = malloc(sizeof(*a) * 128);
+  }
+
+  while (true) {
+    printf("Enter some input: ");
+    if (getline(&buffptr, &size, stdin) == -1) {
+      perror("getline error");
+      exit(EXIT_FAILURE);
+    }
+    // printf("%s\n", buffptr);
+    if (counter >= 5) {
+      a[0] = a[1];
+      a[1] = a[2];
+      a[2] = a[3];
+      a[3] = a[4];
+      a[4] = strcpy(a[4], buffptr);
+    } else {
+      a[counter % 5] = strcpy(a[counter % 5], buffptr);
+    }
+    counter++;
+    if (strcmp(buffptr, sig_string) == 0) {
+      for (int i = 0; i < 5; i++) {
+        printf("%s", a[i]);
+      }
+    }
+  }
+  free(buffptr);
+  return 0;
+}
+/*void handler(int sig){*/
+/* }*/
+/*}*/

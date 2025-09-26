@@ -1,0 +1,35 @@
+#define _POSIX_C_SOURCE 200809
+#include <error.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main() {
+  char *buffptr = NULL;
+  size_t size = 0;
+  char* a[5] = {NULL};
+  int counter = 0;
+  while (true) {
+    printf("Enter some input: ");
+    if (getline(&buffptr, &size, stdin) == -1) {
+      perror("getline error");
+      exit(EXIT_FAILURE);
+    }
+    //printf("%s\n", buffptr);
+    if(counter >= 5){
+      a[0] = a[1];
+      a[1] = a[2];
+      a[2] = a[3];
+      a[3] = a[4];
+      a[4] = buffptr;
+    }
+    else{
+      a[counter % 5] = buffptr;
+    }
+    counter++;
+  }
+  for(int i=0; i<5; i++){
+    printf("%s",a[i]);
+  }
+  free(buffptr);
+  return 0;
+}
