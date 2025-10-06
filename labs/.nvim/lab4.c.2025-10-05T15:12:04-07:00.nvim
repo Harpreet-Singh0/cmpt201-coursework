@@ -1,0 +1,53 @@
+#define _DEFAULT_SOURCE
+#include <inttypes.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+struct header {
+  uint64_t size;
+  struct header *next;
+};
+
+struct block {
+  struct header head;
+  uint8_t *data;
+};
+
+struct block *initialize_block(uint64_t *block_pointer, int content_value) {
+  struct block *b;
+  b->head.size = 128;
+  b->head.next = NULL;
+
+  block_pointer[0] = b->head.size;
+  block_pointer[1] = (uint64_t)b->head.next;
+
+  b->data = (uint8_t *)block_pointer + 16;
+
+  for (int i = 0; i < 116; i++) {
+    b->data[i] = content_value;
+  }
+
+  return b;
+}
+
+int main() {
+  int heap_increase = 256;
+  void *program_break = (uint64_t *)sbrk(heap_increase);
+
+  void *first_block_pointer = program_break;
+  void *second_block_pointer = program_break + (heap_increase / 2);
+
+  printf("%p\n", first_block_pointer);
+  printf("%p\n", second_block_pointer);
+
+  struct header *first_block_header = (struct header *)first_block_pointer;
+  first_block_header->size = 128;
+  printf("%p\n", first_block_header);
+  printf("%" PRIu64 "\n", first_block_header->size);
+  
+  uint64_t *p = (uint64_t *)first_block_pointer;
+  printf("%"PRIu64"\n",*p);
+  return 0;
+}

@@ -1,0 +1,34 @@
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int argc, char *argv[]) {
+
+  char *buffptr = NULL;
+  size_t buffsize = 0;
+  ssize_t n;
+  char *token = NULL;
+  int i;
+  char *str, *saveptr;
+
+  printf("Please enter some text: ");
+  n = getline(&buffptr, &buffsize, stdin);
+
+  if (stdin == NULL) {
+    perror("no input");
+    exit(EXIT_FAILURE);
+  }
+
+  for (i = 0, str = buffptr; i < n; str = NULL, i++) {
+    token = strtok_r(str, " ", &saveptr);
+    if (token == NULL)
+      break;
+    printf("%s\n", token);
+  }
+
+  free(buffptr);
+  exit(EXIT_SUCCESS);
+
+  return 0;
+}

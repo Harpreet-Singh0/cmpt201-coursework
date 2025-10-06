@@ -1,0 +1,55 @@
+#define _DEFAULT_SOURCE
+#include <inttypes.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+struct header {
+  uint64_t size;
+  struct header *next;
+};
+
+int main() {
+  int heap_increase = 256;
+  void *program_break = (uint64_t *)sbrk(heap_increase);
+
+  void *first_block_pointer = program_break;
+  void *second_block_pointer = program_break + (heap_increase / 2);
+
+  struct header *first_block_header = (struct header *)first_block_pointer;
+  first_block_header->size = 128;
+  first_block_header->next = NULL;
+
+  struct header *second_block_header = (struct header *)second_block_pointer;
+  second_block_header->size = 128;
+  second_block_header->next = (struct header *)first_block_pointer;
+
+  uint8_t *first_block_data = (uint8_t *)first_block_pointer + 16;
+
+  uint8_t *second_block_data = (uint8_t *)second_block_pointer + 16;
+
+  for (int i = 0; i < 112; i++) {
+    first_block_data[i] = 0;
+    second_block_data[i] = 1;
+  }
+
+  printf("first block:       %p\n", first_block_pointer);
+  printf("second block:      %p\n", second_block_pointer);
+
+  printf("first block size:  %" PRIu64 "\n", first_block_header->size);
+  printf("first block next:  %p\n", first_block_header->next);
+
+  printf("second block size: %" PRIu64 "\n", second_block_header->size);
+  printf("second block next: %p\n", second_block_header->next);
+
+  for (int i = 0; i < 112; i++) {
+    printf("%" PRIu8 "\n", first_block_data[i]);
+  }
+
+  for (int i = 0; i < 112; i++) {
+    printf("%" PRIu8 "\n", second_block_data[i]);
+  }
+
+  return 0;
+}
