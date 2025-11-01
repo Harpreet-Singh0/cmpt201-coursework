@@ -95,10 +95,10 @@ void groupByKey(IntermediateInput *input, Output *output, int *result_count) {
     present = true;
 
   } else {
-    while (i >= 0) { // check if entry already exists
-      if (output[i].doubled_value == input->doubled_value) {
-        output[i].line_numbers[output[i].count] = input->line_number;
-        output[i].count++;
+    while (i > 0) { // check if entry already exists
+      if (output[i - 1].doubled_value == input->doubled_value) {
+        output[i - 1].line_numbers[output[i - 1].count] = input->line_number;
+        output[i - 1].count++;
         present = true;
         break;
       }
