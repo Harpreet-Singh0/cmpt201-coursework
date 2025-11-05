@@ -1,0 +1,21 @@
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+int main() {
+  char *path = "home/cmpt201/cmpt201-coursework/lecture/tmp";
+  char *str = "..........";
+  int fd = open("tmp", O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+  if (fd == -1) {
+    perror("open");
+  }
+
+  write(fd, str, strlen(str));
+
+  while (1) {
+    sleep(30);
+  }
+
+  return 0;
+}

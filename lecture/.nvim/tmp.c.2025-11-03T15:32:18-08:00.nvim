@@ -1,0 +1,11 @@
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+  char *path = "";
+  if(open() == -1) {
+
+  }
+
+  return 0;
+}

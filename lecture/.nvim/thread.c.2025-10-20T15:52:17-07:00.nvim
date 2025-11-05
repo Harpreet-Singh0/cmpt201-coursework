@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+void *foo(void *s){
+  printf("Hello World\n");
+  return NULL;
+}
+
+int main(){
+  pthread_t thread;
+  void *ret_val = 0;
+  if (pthread_create(&thread, NULL, foo, NULL) == 0){
+    pthread_join(thread, &ret_val);
+    printf("%ul", (uint64_t)ret_val);
+  }
+  return 0;
+}

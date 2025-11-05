@@ -1,0 +1,23 @@
+#include <pthread.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+void *foo(void *s) {
+  char *msg = (char *)s;
+  printf("%s\n", msg);
+  printf("Hello World\n");
+  return (void *)strlen(msg);
+}
+
+int main() {
+  pthread_t thread;
+  void *ret_val = 0;
+  if (pthread_create(&thread, NULL, foo, "Hey!\n") == 0) {
+    pthread_join(thread, &ret_val);
+    printf("%u", (uint64_t)ret_val);
+  }
+  return 0;
+}
