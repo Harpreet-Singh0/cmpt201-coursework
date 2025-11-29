@@ -1,0 +1,8 @@
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fnctl.h>
+
+int main() {
+  int fifo = mkfifo();
+  return 0;
+}

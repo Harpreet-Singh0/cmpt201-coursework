@@ -1,0 +1,17 @@
+#define _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <sys/stat.h>
+#include <sys/sysmacros.h>
+
+int main(int argc, char **argv) {
+  char *path = argv[1];
+  struct stat s;
+  int status = stat(path, &s);
+  if (S_ISREG(s.st_mode)) {
+    printf("Regular file\n");
+  } else if (S_ISDIR(s.st_mode)) {
+    printf("Directory\n");
+  }
+
+  return 0;
+}
